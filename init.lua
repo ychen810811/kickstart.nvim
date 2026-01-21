@@ -102,7 +102,7 @@ vim.g.have_nerd_font = true
 vim.o.number = true
 -- You can also add relative line numbers, to help with jumping.
 --  Experiment for yourself to see if you like it!
--- vim.o.relativenumber = true
+vim.o.relativenumber = true
 
 -- Enable mouse mode, can be useful for resizing splits for example!
 vim.o.mouse = 'a'
@@ -167,10 +167,13 @@ vim.o.scrolloff = 5
 vim.o.confirm = true
 
 -- my customizations
-vim.opt.tabstop = 4 -- A tab character is 4 spaces wide
-vim.opt.shiftwidth = 4 -- Number of spaces to use for each step of indentation
-vim.opt.expandtab = true -- Use spaces instead of tab characters
-vim.opt.smartindent = true -- Smartly auto-indent new lines
+--[[
+vim.o.tabstop = 4 -- A tab character is 4 spaces wide
+vim.o.softtabstop = 4 -- Tab key in insert mode inserts 4 spaces
+vim.o.shiftwidth = 4 -- Number of spaces to use for each step of indentation
+vim.o.expandtab = true -- Use spaces instead of tab characters
+vim.o.smartindent = true -- Smartly auto-indent new lines
+--]]
 
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
@@ -421,6 +424,9 @@ require('lazy').setup({
             'node_modules',
             '%.git/',
             'Library/',
+            'Applications',
+            'Applications (Parallels)',
+            'Parallels',
             '%.DS_store',
             '%.cache',
           },
@@ -812,12 +818,12 @@ require('lazy').setup({
           -- `friendly-snippets` contains a variety of premade snippets.
           --    See the README about individual language/framework/plugin snippets:
           --    https://github.com/rafamadriz/friendly-snippets
-          -- {
-          --   'rafamadriz/friendly-snippets',
-          --   config = function()
-          --     require('luasnip.loaders.from_vscode').lazy_load()
-          --   end,
-          -- },
+          {
+            'rafamadriz/friendly-snippets',
+            config = function()
+              require('luasnip.loaders.from_vscode').lazy_load()
+            end,
+          },
         },
         opts = {},
       },
@@ -900,14 +906,8 @@ require('lazy').setup({
       ---@diagnostic disable-next-line: missing-fields
       require('tokyonight').setup {
         styles = {
-          comments = { italic = true }, -- Disable italics in comments
+          comments = { italic = true }, -- Enable italics in comments
         },
-        on_highlights = function(hl, c)
-          hl.WinSeparator = {
-            fg = c.comment,
-            bold = true,
-          }
-        end,
       }
 
       -- Load the colorscheme here.
