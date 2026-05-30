@@ -2,59 +2,35 @@
 --  I promise not to create any merge conflicts in this directory :)
 --
 -- See the kickstart.nvim README for more information
-return {
-  'nvim-treesitter/nvim-treesitter',
-  event = { 'BufReadPost', 'BufNewFile' },
-  dependencies = {
-    'nvim-treesitter/nvim-treesitter-textobjects',
-  },
+vim.pack.add { { src = 'https://github.com/nvim-treesitter/nvim-treesitter-textobjects', version = 'main' } }
 
-  opts = {
-    incremental_selection = {
-      enable = true,
-      keymaps = {
-        init_selection = '<CR>',
-        node_incremental = '<CR>',
-        scope_incremental = '<TAB>',
-        node_decremental = '<BS>',
-      },
-    },
-
-    textobjects = {
-      select = {
-        enable = true,
-        lookahead = true, -- 自动跳到光标后的下一个匹配项
-        keymaps = {
-          -- 自定义你的文本对象键位
-          -- 'a' = around (包含外层), 'i' = inner (仅内部)
-          ['af'] = '@function.outer', -- 选中整个函数
-          ['if'] = '@function.inner', -- 选中函数内部
-          ['ac'] = '@class.outer', -- 选中整个类
-          ['ic'] = '@class.inner', -- 选中类内部
-          ['aa'] = '@parameter.outer', -- 选中整个参数
-          ['ia'] = '@parameter.inner', -- 选中参数文本
-        },
-      },
-
-      move = {
-        enable = true,
-        set_jumps = true, -- 将跳转记录到 jumplist (可用 Ctrl-o 回退)
-        goto_next_start = {
-          [']m'] = '@function.outer', -- 跳转到下一个函数开头
-          [']]'] = '@class.outer', -- 跳转到下一个类开头
-        },
-        goto_next_end = {
-          [']M'] = '@function.outer', -- 跳转到下一个函数结尾
-        },
-        goto_previous_start = {
-          ['[m'] = '@function.outer', -- 跳转到上一个函数开头
-          ['[['] = '@class.outer', -- 跳转到上一个类开头
-        },
-        goto_previous_end = {
-          ['[M'] = '@function.outer', -- 跳转到上一个函数结尾
-        },
-      },
-    },
-  },
+require('nvim-treesitter-textobjects').setup {
+  select = { lookahead = true },
+  move = { set_jumps = true },
 }
+
+local select = require 'nvim-treesitter-textobjects.select'
+local move = require 'nvim-treesitter-textobjects.move'
+
+for keys, capture in pairs {
+  af = '@function.outer',
+  ['if'] = '@function.inner',
+  ac = '@class.outer',
+  ic = '@class.inner',
+  aa = '@parameter.outer',
+  ia = '@parameter.inner',
+} do
+  vim.keymap.set({ 'x', 'o' }, keys, function() select.select_textobject(capture, 'textobjects') end)
+end
+
+for keys, mapping in pairs {
+  [']m'] = { move.goto_next_start, '@function.outer' },
+  [']]'] = { move.goto_next_start, '@class.outer' },
+  [']M'] = { move.goto_next_end, '@function.outer' },
+  ['[m'] = { move.goto_previous_start, '@function.outer' },
+  ['[['] = { move.goto_previous_start, '@class.outer' },
+  ['[M'] = { move.goto_previous_end, '@function.outer' },
+} do
+  vim.keymap.set({ 'n', 'x', 'o' }, keys, function() mapping[1](mapping[2], 'textobjects') end)
+end
 -- vim: ts=2 sts=2 sw=2 et

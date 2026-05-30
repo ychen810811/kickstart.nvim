@@ -1,9 +1,6 @@
-return {
-  'catppuccin/nvim',
-  name = 'catppuccin',
-  priority = 1000,
-  config = function()
-    require('catppuccin').setup {
+vim.pack.add { 'https://github.com/catppuccin/nvim' }
+
+require('catppuccin').setup {
       flavour = 'auto',
       background = {
         light = 'latte',
@@ -71,8 +68,6 @@ return {
         },
       },
       --]]
-    }
-
-    vim.cmd.colorscheme 'catppuccin'
-  end,
 }
+
+vim.cmd.colorscheme 'catppuccin'

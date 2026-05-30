@@ -1,8 +1,6 @@
-return {
-  'nvim-lualine/lualine.nvim',
-  dependencies = { 'nvim-tree/nvim-web-devicons' }, -- 必须安装图标支持
-  config = function()
-    require('lualine').setup {
+vim.pack.add { 'https://github.com/nvim-lualine/lualine.nvim' }
+
+require('lualine').setup {
       options = {
         theme = 'catppuccin-nvim',
 
@@ -22,6 +20,4 @@ return {
         lualine_y = { 'progress' },
         lualine_z = { 'location' },
       },
-    }
-  end,
 }

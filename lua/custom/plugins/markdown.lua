@@ -2,11 +2,16 @@
 --  I promise not to create any merge conflicts in this directory :)
 --
 -- See the kickstart.nvim README for more information
-return {
-  {
-    'MeanderingProgrammer/render-markdown.nvim',
-    dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-tree/nvim-web-devicons' },
-    opts = {
+vim.g.mkdp_filetypes = { 'markdown' }
+vim.g.table_mode_corner = '|'
+
+vim.pack.add {
+  'https://github.com/MeanderingProgrammer/render-markdown.nvim',
+  'https://github.com/iamcco/markdown-preview.nvim',
+  'https://github.com/dhruvasagar/vim-table-mode',
+}
+
+require('render-markdown').setup {
       code = {
         sign = false,
         width = 'block',
@@ -16,24 +21,6 @@ return {
         sign = false,
         icons = { 'h1 ', 'h2 ', 'h3 ', 'h4 ', 'h5 ', 'h6 ' },
       },
-    },
-    ft = { 'markdown', 'norg', 'rmd', 'org' },
-  },
-  {
-    'iamcco/markdown-preview.nvim',
-    cmd = { 'MarkdownPreviewToggle', 'MarkdownPreview', 'MarkdownPreviewStop' },
-    build = 'cd app && npm install',
-    init = function()
-      vim.g.mkdp_filetypes = { 'markdown' }
-    end,
-  },
-  {
-    'dhruvasagar/vim-table-mode',
-    ft = 'markdown',
-    config = function()
-      vim.g.table_mode_corner = '|'
-    end,
-  },
 }
 
 -- vim: ts=2 sts=2 sw=2 et
